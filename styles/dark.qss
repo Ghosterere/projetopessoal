@@ -1,0 +1,120 @@
+QWidget {
+    background: #23272e;
+    color: #e3e5e8;
+    font-family: Segoe UI, Arial, sans-serif;
+    font-size: 14px;
+}
+
+QLineEdit, QComboBox, QDateEdit, QTimeEdit {
+    background: #18191c;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #36373b;
+    transition: border 0.2s;
+    color: #e3e5e8;
+}
+QLineEdit:focus, QComboBox:focus, QDateEdit:focus, QTimeEdit:focus {
+    border: 1.5px solid #8b9cfb;
+    background: #23243a;
+}
+
+QPushButton {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+    transition: background 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+QPushButton:hover, QPushButton:focus {
+    background: #4f46e5;
+    box-shadow: 0 4px 16px rgba(99,102,241,0.18);
+}
+QPushButton:pressed {
+    background: #4338ca;
+}
+
+QListWidget {
+    background: #23272e;
+    border-radius: 12px;
+    padding: 8px;
+    border: 1px solid #36373b;
+}
+
+#ItemAtividade {
+    background: #18191c;
+    border-radius: 12px;
+    border: 1px solid #36373b;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+    margin-bottom: 10px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+#ItemAtividade:hover {
+    background: #2a2d36;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.13);
+}
+
+#hora {
+    font-size: 12px;
+    color: #a1a1aa;
+    margin-top: 2px;
+}
+
+#titulo {
+    font-size: 15px;
+    font-weight: 600;
+    color: #e3e5e8;
+}
+
+QDialog {
+    background: #23272e;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid #36373b;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+
+QTextEdit {
+    background: #18191c;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #36373b;
+    color: #e3e5e8;
+}
+
+QComboBox QAbstractItemView {
+    background: #23272e;
+    border-radius: 8px;
+    border: 1px solid #36373b;
+    selection-background-color: #36373b;
+    color: #e3e5e8;
+}
+
+QScrollBar:vertical {
+    background: #23272e;
+    width: 10px;
+    margin: 2px 0 2px 0;
+    border-radius: 5px;
+}
+QScrollBar::handle:vertical {
+    background: #36373b;
+    min-height: 20px;
+    border-radius: 5px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #6366f1;
+}
+
+QLabel[badge="true"] {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 8px;
+    background-color: #36373b;
+    color: #a5b4fc;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+

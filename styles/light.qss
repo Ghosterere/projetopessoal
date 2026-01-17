@@ -1,0 +1,120 @@
+QWidget {
+    background: #f7f7fa;
+    color: #1a202c;
+    font-family: Segoe UI, Arial, sans-serif;
+    font-size: 14px;
+}
+
+QLineEdit, QComboBox, QDateEdit, QTimeEdit {
+    background: #fff;
+    border-radius: 8px;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    transition: border 0.2s;
+    color: #1a202c;
+}
+QLineEdit:focus, QComboBox:focus, QDateEdit:focus, QTimeEdit:focus {
+    border: 1.5px solid #6366f1;
+    background: #f1f5ff;
+}
+
+QPushButton {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+QPushButton:hover, QPushButton:focus {
+    background: #4f46e5;
+    box-shadow: 0 4px 16px rgba(99,102,241,0.12);
+}
+QPushButton:pressed {
+    background: #4338ca;
+}
+
+QListWidget {
+    background: #fff;
+    border-radius: 12px;
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+#ItemAtividade {
+    background: #f9fafb;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    margin-bottom: 10px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+#ItemAtividade:hover {
+    background: #eef2ff;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+}
+
+#hora {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+#titulo {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+QDialog {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+QTextEdit {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    color: #1a202c;
+}
+
+QComboBox QAbstractItemView {
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    selection-background-color: #eef2ff;
+    color: #1a202c;
+}
+
+QScrollBar:vertical {
+    background: #f1f5f9;
+    width: 10px;
+    margin: 2px 0 2px 0;
+    border-radius: 5px;
+}
+QScrollBar::handle:vertical {
+    background: #d1d5db;
+    min-height: 20px;
+    border-radius: 5px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #a5b4fc;
+}
+
+QLabel[badge="true"] {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 8px;
+    background-color: #e0e7ff;
+    color: #6366f1;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
