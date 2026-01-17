@@ -3,15 +3,15 @@ import os
 import logging
 from datetime import datetime, timedelta  # noqa: F401
 
-from PySide6.QtWidgets import (
+from PySide6.QtWidgets import ( # type: ignore
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QListWidget, QListWidgetItem,
     QLabel, QLineEdit, QDialog, QTextEdit,
     QMessageBox, QMenu, QComboBox,
     QTimeEdit, QDateEdit, QInputDialog
 )
-from PySide6.QtCore import Qt, QTimer, QTime, QDate
-from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt, QTimer, QTime, QDate # type: ignore
+from PySide6.QtGui import QIcon # type: ignore
 
 from database import Database  # NOVO: banco separado
 
@@ -350,4 +350,3 @@ if __name__ == "__main__":
     window = Planner()
     window.show()
     sys.exit(app.exec())
-    
