@@ -1,21 +1,20 @@
 import sys
 import os
 import logging
-from datetime import datetime, timedelta  # noqa: F401
+from datetime import datetime
 
-from PySide6.QtWidgets import ( # type: ignore
+from PySide6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QListWidget, QListWidgetItem,
     QLabel, QLineEdit, QDialog, QTextEdit,
     QMessageBox, QMenu, QComboBox,
     QTimeEdit, QDateEdit, QInputDialog
 )
-from PySide6.QtCore import Qt, QTimer, QTime, QDate # type: ignore
-from PySide6.QtGui import QIcon # type: ignore
+from PySide6.QtCore import Qt, QTimer, QTime, QDate
+from PySide6.QtGui import QIcon
 
-from database import Database  # NOVO: banco separado
+from database import Database
 
-# ================= CONFIG =================
 logging.basicConfig(level=logging.INFO)
 
 STYLES_DIR = "styles"
@@ -25,6 +24,7 @@ LIGHT_THEME = "light.qss"
 NOTIFICATION_MINUTES = 5
 PAGE_SIZE = 30
 
+
 def resource_path(path):
     try:
         base = sys._MEIPASS
@@ -32,7 +32,8 @@ def resource_path(path):
         base = os.path.abspath(".")
     return os.path.join(base, path)
 
-# ================= NOTA DIALOG =================
+
+# ================= NOTA =================
 class NotaDialog(QDialog):
     def __init__(self, id_, nome, db, dark):
         super().__init__()
@@ -49,7 +50,7 @@ class NotaDialog(QDialog):
         self.text.setText(self.db.nota(id_))
         layout.addWidget(self.text)
 
-        save = QPushButton(QIcon.fromTheme("document-save"), "Salvar")
+        save = QPushButton("Salvar")
         save.clicked.connect(self.save)
         layout.addWidget(save)
 
@@ -65,6 +66,7 @@ class NotaDialog(QDialog):
         if os.path.exists(path):
             self.setStyleSheet(open(path, encoding="utf-8").read())
 
+
 # ================= ITEM =================
 class ItemAtividade(QWidget):
     def __init__(self, nome, inicio, fim, status, tags):
@@ -73,13 +75,10 @@ class ItemAtividade(QWidget):
         v.setSpacing(8)
         v.setContentsMargins(10, 8, 10, 8)
 
-        # ===== TÍTULO =====
         top = QHBoxLayout()
-
         title = QLabel(nome)
         title.setStyleSheet(
-            "font-size:15px;"
-            "font-weight:600;"
+            "font-size:15px;font-weight:600;"
             + ("text-decoration:line-through;color:#888;" if status else "")
         )
         dot = QLabel("●")
@@ -88,28 +87,20 @@ class ItemAtividade(QWidget):
         top.addWidget(title)
         top.addStretch()
         top.addWidget(dot)
-
         v.addLayout(top)
 
-        # ===== HORÁRIO =====
         horario = QLabel(f"{inicio[11:16]} - {fim[11:16]}")
         horario.setStyleSheet("font-size:12px;color:#aaa;")
-        v.addWidget(horario, alignment=Qt.AlignLeft)
+        v.addWidget(horario)
 
-        # ===== TAG BADGE =====
         if tags:
             badge = QLabel(tags.upper())
-            badge.setAlignment(Qt.AlignLeft)
-            badge.setStyleSheet("""
-                QLabel {
-                    font-size:11px;
-                    padding:3px 8px;
-                    border-radius:8px;
-                    background-color: rgba(120,120,120,0.15);
-                    color: #bbb;
-                }
-            """)
-            v.addWidget(badge, alignment=Qt.AlignLeft)
+            badge.setStyleSheet(
+                "font-size:11px;padding:3px 8px;border-radius:8px;"
+                "background-color:rgba(120,120,120,0.15);color:#bbb;"
+            )
+            v.addWidget(badge)
+
 
 # ================= PLANNER =================
 class Planner(QWidget):
@@ -126,7 +117,7 @@ class Planner(QWidget):
 
         layout = QVBoxLayout(self)
 
-        # ===== TOPO =====
+        # TOPO
         top = QHBoxLayout()
 
         self.nome = QLineEdit()
@@ -141,12 +132,10 @@ class Planner(QWidget):
         self.tags = QLineEdit()
         self.tags.setPlaceholderText("Tags")
 
-        add = QPushButton(QIcon.fromTheme("list-add"), "")
-        add.setToolTip("Adicionar atividade")
+        add = QPushButton("+")
         add.clicked.connect(self.add)
 
-        self.theme_btn = QPushButton("🌙" if self.dark else "☀️")
-        self.theme_btn.setToolTip("Alternar tema")
+        self.theme_btn = QPushButton("🌙")
         self.theme_btn.clicked.connect(self.toggle_theme)
 
         for w in (self.nome, self.data, self.inicio, self.fim, self.tags, add, self.theme_btn):
@@ -154,9 +143,8 @@ class Planner(QWidget):
 
         layout.addLayout(top)
 
-        # ===== FILTROS =====
+        # FILTROS
         filtros = QHBoxLayout()
-
         self.status = QComboBox()
         self.status.addItems(["Todos", "Pendentes", "Concluídas"])
         self.status.currentIndexChanged.connect(self.reset)
@@ -169,7 +157,7 @@ class Planner(QWidget):
         filtros.addWidget(self.busca)
         layout.addLayout(filtros)
 
-        # ===== LISTA =====
+        # LISTA
         self.lista = QListWidget()
         self.lista.verticalScrollBar().valueChanged.connect(self.scroll)
         self.lista.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -177,18 +165,16 @@ class Planner(QWidget):
         self.lista.itemDoubleClicked.connect(self.open_note)
         layout.addWidget(self.lista)
 
-        # ===== AVISO VAZIO =====
         self.aviso_vazio = QLabel("Nenhuma atividade encontrada.")
         self.aviso_vazio.setAlignment(Qt.AlignCenter)
-        self.aviso_vazio.setStyleSheet("color:#888;font-size:16px;")
-        layout.addWidget(self.aviso_vazio)
         self.aviso_vazio.hide()
+        layout.addWidget(self.aviso_vazio)
 
         self.load_styles()
         self.reset()
         self.start_notifications()
 
-    # ===== THEME =====
+    # ===== TEMA =====
     def load_styles(self):
         theme = DARK_THEME if self.dark else LIGHT_THEME
         path = resource_path(f"{STYLES_DIR}/{theme}")
@@ -214,50 +200,6 @@ class Planner(QWidget):
         self.tags.clear()
         self.reset()
 
-    def edit(self, item):
-        id_, nome, status = item.data(Qt.UserRole)
-        row = self.db.cur.execute("SELECT * FROM atividades WHERE id=?", (id_,)).fetchone()
-        if not row:
-            return
-        _, nome, inicio, fim, _, _, tags = row
-
-        # Editar nome
-        new_nome, ok = QInputDialog.getText(self, "Editar Atividade", "Nome:", text=nome)
-        if not ok or not new_nome:
-            return
-
-        # Editar data/hora
-        dt = QDate.fromString(inicio[:10], "yyyy-MM-dd")
-        tm_ini = QTime.fromString(inicio[11:16], "HH:mm")
-        tm_fim = QTime.fromString(fim[11:16], "HH:mm")
-
-        new_data, ok = QInputDialog.getText(self, "Editar Data", "Data (YYYY-MM-DD):", text=dt.toString("yyyy-MM-dd"))
-        if not ok or not new_data:
-            return
-        new_ini, ok = QInputDialog.getText(self, "Editar Início", "Início (HH:MM):", text=tm_ini.toString("HH:mm"))
-        if not ok or not new_ini:
-            return
-        new_fim, ok = QInputDialog.getText(self, "Editar Fim", "Fim (HH:MM):", text=tm_fim.toString("HH:mm"))
-        if not ok or not new_fim:
-            return
-
-        # Editar tags
-        new_tags, ok = QInputDialog.getText(self, "Editar Tags", "Tags:", text=tags)
-        if not ok:
-            return
-
-        try:
-            inicio_str = f"{new_data} {new_ini}:00"
-            fim_str = f"{new_data} {new_fim}:00"
-            datetime.strptime(inicio_str, "%Y-%m-%d %H:%M:%S")
-            datetime.strptime(fim_str, "%Y-%m-%d %H:%M:%S")
-        except Exception:
-            QMessageBox.warning(self, "Erro", "Data ou hora inválida.")
-            return
-
-        self.db.update(id_, new_nome, inicio_str, fim_str, new_tags)
-        self.reset()
-
     def reset(self):
         self.lista.clear()
         self.offset = 0
@@ -271,16 +213,13 @@ class Planner(QWidget):
             st = 1
 
         rows = self.db.all(PAGE_SIZE, self.offset, st, self.busca.text())
-        if not rows and self.offset == 0:
-            self.aviso_vazio.show()
-        else:
-            self.aviso_vazio.hide()
+        self.aviso_vazio.setVisible(not rows and self.offset == 0)
+
         for r in rows:
-            id_, nome, ini, fim, _, status, tags = r
-            w = ItemAtividade(nome, ini, fim, status, tags)
+            w = ItemAtividade(r["nome"], r["inicio"], r["fim"], r["status"], r["tags"])
             i = QListWidgetItem()
             i.setSizeHint(w.sizeHint())
-            i.setData(Qt.UserRole, (id_, nome, status))
+            i.setData(Qt.UserRole, (r["id"], r["nome"], r["status"]))
             self.lista.addItem(i)
             self.lista.setItemWidget(i, w)
 
@@ -297,23 +236,18 @@ class Planner(QWidget):
 
         id_, nome, status = item.data(Qt.UserRole)
         m = QMenu(self)
-
-        note = m.addAction(QIcon.fromTheme("document-edit"), "Anotação")
-        edit = m.addAction(QIcon.fromTheme("edit-rename"), "Editar")
-        toggle = m.addAction(QIcon.fromTheme("emblem-ok"), "Concluir" if not status else "Reabrir")
-        delete = m.addAction(QIcon.fromTheme("edit-delete"), "Excluir")
+        note = m.addAction("Anotação")
+        toggle = m.addAction("Concluir" if not status else "Reabrir")
+        delete = m.addAction("Excluir")
 
         a = m.exec(self.lista.mapToGlobal(pos))
         if a == note:
             self.open_note(item)
-        elif a == edit:
-            self.edit(item)
         elif a == toggle:
             self.db.toggle(id_, 0 if status else 1)
             self.reset()
         elif a == delete:
-            reply = QMessageBox.question(self, "Excluir", f"Excluir '{nome}'?", QMessageBox.Yes | QMessageBox.No)
-            if reply == QMessageBox.Yes:
+            if QMessageBox.question(self, "Excluir", f"Excluir '{nome}'?") == QMessageBox.Yes:
                 self.db.delete(id_)
                 self.reset()
 
@@ -329,7 +263,6 @@ class Planner(QWidget):
 
     def notify(self):
         now = datetime.now()
-
         for id_, nome, inicio in self.db.pendentes():
             if id_ in self.notificados:
                 continue
@@ -339,14 +272,15 @@ class Planner(QWidget):
 
             if 0 < diff <= NOTIFICATION_MINUTES:
                 QMessageBox.information(
-                    self,
-                    "Lembrete",
-                    f"'{nome}' começa em {int(diff)} minutos"
+                    self, "Lembrete", f"'{nome}' começa em {int(diff)} minutos"
                 )
                 self.notificados.add(id_)
 
+
+# ================= MAIN =================
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Planner()
     window.show()
     sys.exit(app.exec())
+
